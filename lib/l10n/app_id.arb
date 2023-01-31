@@ -1,9 +1,11 @@
 {
-  "text1": "Home",
+  "text1": "Semua Produk",
   "text2": "Cari Produk",
   "text3": "Harga Barang",
   "text4": "Biaya Pengiriman",
   "text5": "Total",
+  "text6": "Semua Kategori",
+  "text7": "Kategori",
   "add": "Tambah",
   "cart": "Keranjang",
   "checkout": "Check Out",

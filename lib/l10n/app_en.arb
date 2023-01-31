@@ -1,9 +1,11 @@
 {
-  "text1": "Home",
+  "text1": "Semua Produk",
   "text2": "Search Products",
   "text3": "Total Prices",
   "text4": "Delivery Fee",
   "text5": "Total",
+  "text6": "All Categories",
+  "text7": "Categories",
   "add": "Add",
   "cart": "Cart",
   "checkout": "Check Out",
