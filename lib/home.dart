@@ -31,7 +31,6 @@ class HomeState extends State<Home> {
   var selectedCategory = null;
   var addedProducts = [];
   Timer? debounce;
-  List<Widget> navBarItems = [];
 
   void initState() {
     super.initState();
@@ -54,7 +53,6 @@ class HomeState extends State<Home> {
         mainLoading = true;
       });
       await getCategories();
-      buildNavBarItems();
       setState(() {
         if (categories.length > 0) {
           selectedCategory = categories[0];
@@ -123,14 +121,40 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     var width = Global.getWidth(context);
     var height = Global.getHeight(context);
-    buildNavBarItems();
     return SafeArea(
         child: Scaffold(
             key: key,
             backgroundColor: Colors.white,
             drawer: Drawer(
               child: ListView(
-                children: navBarItems
+                children: [
+                  DrawerHeader(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment(0.8, 1),
+                        colors: <Color>[
+                          Color(0xfff12711),
+                          Color(0xfff5af19)
+                        ],
+                        tileMode: TileMode.mirror,
+                      ),
+                    ),
+                    child: Center(
+                        child: Text('MicroLoop Product', style: TextStyle(color: Colors.white, fontSize: 16))
+                    ),
+                  ),
+                  ListTile(title: Text(widget.string.text1), onTap: () {
+                    Navigator.pop(context);
+                  }),
+                  ListTile(title: Text(widget.string.cart), onTap: () {
+                    Navigator.pop(context);
+                    Global.navigate(context, Cart(context, widget.string, addedProducts));
+                  }),
+                  ListTile(title: Text(widget.string.exit), onTap: () {
+                    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                  })
+                ]
               )
             ),
             body: Container(width: width, child: Column(
@@ -196,22 +220,7 @@ class HomeState extends State<Home> {
                                                   }
                                                 )
                                               )
-                                          ),
-                                          Container(width: 50, height: 50, child: GestureDetector(
-                                              behavior: HitTestBehavior.translucent,
-                                              onTap: () async {
-                                                SpeechToText speech = SpeechToText();
-                                                bool available = await speech.initialize( onStatus: (status) {}, onError: (e) {});
-                                                if (available) {
-                                                  speech.listen(onResult: (result) async {
-                                                    var query = await result.recognizedWords;
-                                                    searchProducts(query);
-                                                  });
-                                                }
-                                                speech.stop();
-                                              },
-                                              child: Center(child: Icon(Icons.mic, color: Color(0xff9892a9), size: 25))
-                                          ))
+                                          )
                                         ]
                                     )
                                 )
@@ -481,38 +490,5 @@ class HomeState extends State<Home> {
             ))
         )
     );
-  }
-
-  void buildNavBarItems() {
-    navBarItems = [];
-    navBarItems.add(DrawerHeader(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment(0.8, 1),
-          colors: <Color>[
-            Color(0xfff12711),
-            Color(0xfff5af19)
-          ],
-          tileMode: TileMode.mirror,
-        ),
-      ),
-      child: Center(
-          child: Text('MicroLoop Product', style: TextStyle(color: Colors.white, fontSize: 16))
-      ),
-    ));
-    navBarItems.add(ListTile(title: Text(widget.string.text1), onTap: () {
-      Navigator.pop(context);
-    }));
-    navBarItems.add(ListTile(title: Text(widget.string.text7), onTap: () {
-      Navigator.pop(context);
-    }));
-    navBarItems.add(ListTile(title: Text(widget.string.cart), onTap: () {
-      Navigator.pop(context);
-      Global.navigate(context, Cart(context, widget.string, addedProducts));
-    }));
-    navBarItems.add(ListTile(title: Text(widget.string.exit), onTap: () {
-      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-    }));
   }
 }
